@@ -20,6 +20,23 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+
+    <script id="shader-vs" type="x-shader/x-vertex">
+    attribute vec4 coords;
+    attribute float pointSize;
+    void main(void) {
+      gl_Position = coords;
+      gl_PointSize = pointSize;
+    }
+    </script>
+
+    <script id="shader-fs" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform vec4 color;
+    void main(void) {
+      gl_FragColor = color;
+    }
+    </script>
   </head>
   <body>
     <noscript>
