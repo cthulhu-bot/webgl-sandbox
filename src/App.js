@@ -24,10 +24,10 @@ class App extends Component {
   }
 
   updateCanvas() {
-    let gl, shaderProgram;
+    let gl, shaderProgram, vertices;
     gl = this.initGL();
     shaderProgram = this.createShaders(gl, shaderProgram);
-    this.createVertices(gl, shaderProgram);
+    this.createVertices(gl, shaderProgram, vertices);
     this.draw(gl);
 
   }
@@ -48,7 +48,7 @@ class App extends Component {
 
   draw(gl) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-    gl.drawArrays(gl.POINTS, 0, 1)
+    gl.drawArrays(gl.POINTS, 0, 3)
   }
 
   createShaders(gl, shaderProgram) {
@@ -84,16 +84,31 @@ class App extends Component {
     return shaderProgram
   }
 
-  createVertices(gl, shaderProgram) {
+  createVertices(gl, shaderProgram, vertices) {
+    vertices = [
+      -0.9, -0.9, 0.0,
+      0.9, -0.9, 0.0,
+      0.0, 0.9, 0.0
+    ]
+
+    let buffer = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW)
+
     // these attribLocation vars are defined as shaderAttributes above
     let coords = gl.getAttribLocation(shaderProgram, 'coords')
-    gl.vertexAttrib3f(coords, 0.5, 0, 0)
+//    gl.vertexAttrib3f(coords, 0.5, 0, 0)
+    gl.vertexAttribPointer(coords, 3, gl.FLOAT, false, 0, 0)
+    gl.enableVertexAttribArray(coords)
+    gl.bindBuffer(gl.ARRAY_BUFFER, null)
 
+    // UPDATE POINTSIZE HERE
     let pointSize = gl.getAttribLocation(shaderProgram, 'pointSize')
-    gl.vertexAttrib1f(pointSize, 50)
+    gl.vertexAttrib1f(pointSize, 20)
 
+    // UPDATE COLOR HERE
     let color = gl.getUniformLocation(shaderProgram, 'color')
-    gl.uniform4f(color, 1, 0, 1, 1)
+    gl.uniform4f(color, 0, 0, 0, 1)
   }
 }
 
